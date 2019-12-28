@@ -1,6 +1,7 @@
-package dev.wsad.bm.core.controllers.entities;
+package dev.wsad.bm.core.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class BuildingEntity {
 

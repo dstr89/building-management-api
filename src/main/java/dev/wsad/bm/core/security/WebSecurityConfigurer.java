@@ -1,4 +1,4 @@
-package dev.wsad.bm.core.controllers.security;
+package dev.wsad.bm.core.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,23 +12,24 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder)
-                .withUser("spring")
-                .password(encoder.encode("secret"))
-                .roles("USER");
+        auth
+                .inMemoryAuthentication()
+                .withUser("user").password("{noop}1234").roles("USER")
+                .and()
+                .withUser("admin").password("{noop}1234").roles("USER", "ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/private/**")
-                .authenticated()
-                .antMatchers("/buildings/**")
-                .permitAll()
+        http
+                .httpBasic()
                 .and()
-                .httpBasic();
+                .authorizeRequests()
+                .antMatchers("/api/user/**").hasRole("USER")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .and()
+                .csrf().disable()
+                .formLogin().disable();
     }
 }
 

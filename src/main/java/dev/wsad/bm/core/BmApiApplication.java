@@ -1,4 +1,4 @@
-package dev.wsad.bm.core.controllers;
+package dev.wsad.bm.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

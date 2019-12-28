@@ -1,8 +1,19 @@
 # building-management-api
 
-## TODO
+## API usage
 
-Add some docs here
+## Buildings
+
+### List all buildings
+```curl -X GET localhost:8080/api/user/buildings -u user:1234```
+### Get specific building by ID
+```curl -X GET localhost:8080/api/user/buildings/1 -u user:1234```
+### Save new building
+```curl -X POST localhost:8080/api/user/buildings -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Zagreb\"} -u user:1234```
+### Update existing building
+```curl -X PUT localhost:8080/api/user/buildings/1 -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Osijek\"} -u user:1234```
+### Delete existing building
+```curl -X DELETE localhost:8080/api/user/buildings/2 -u user:1234```
 
 ## Spring
 

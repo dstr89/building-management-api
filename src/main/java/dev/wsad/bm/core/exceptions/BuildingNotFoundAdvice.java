@@ -1,4 +1,4 @@
-package dev.wsad.bm.core.controllers.exceptions;
+package dev.wsad.bm.core.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
