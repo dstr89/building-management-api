@@ -1,4 +1,4 @@
-package dev.wsad.bm.core;
+package dev.wsad.bm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

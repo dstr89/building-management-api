@@ -2,12 +2,20 @@
 
 ## API usage
 
+## Login
+
+### Get token
+```curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"user\", \"password\":\"password\"}"```
+
+### Test token
+```curl -X GET http://localhost:8080/user/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
+
 ## Buildings
 
 ### List all buildings
-```curl -X GET localhost:8080/api/user/buildings -u user:1234```
+```curl -X GET localhost:8080/api/user/buildings -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
 ### Get specific building by ID
-```curl -X GET localhost:8080/api/user/buildings/1 -u user:1234```
+```curl -X GET localhost:8080/api/user/buildings/1 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
 ### Save new building
 ```curl -X POST localhost:8080/api/user/buildings -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Zagreb\"} -u user:1234```
 ### Update existing building

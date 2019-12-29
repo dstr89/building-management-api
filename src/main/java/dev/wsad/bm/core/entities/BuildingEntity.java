@@ -1,16 +1,18 @@
 package dev.wsad.bm.core.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Data
-@NoArgsConstructor
 @Entity
+@Table(name="buildings")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BuildingEntity {
 
     private @Id @GeneratedValue Long id;

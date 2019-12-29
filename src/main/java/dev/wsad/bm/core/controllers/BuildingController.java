@@ -3,6 +3,7 @@ package dev.wsad.bm.core.controllers;
 import dev.wsad.bm.core.entities.BuildingEntity;
 import dev.wsad.bm.core.exceptions.BuildingNotFoundException;
 import dev.wsad.bm.core.repository.BuildingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +11,8 @@ import java.util.List;
 @RestController
 class BuildingController {
 
-    private final BuildingRepository repository;
-
-    BuildingController(BuildingRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private BuildingRepository repository;
 
     @GetMapping("/api/user/buildings")
     List<BuildingEntity> all() {
