@@ -30,15 +30,15 @@ public class DbDataInitializer implements CommandLineRunner {
 
         this.userRepository.save(UserEntity.builder()
                 .username("user")
-                .password(passwordEncoder.encode("password"))
-                .roles(Arrays.asList("USER"))
+                .password(passwordEncoder.encode("Ry6zNwqNW+59+tpC"))
+                .roles(Arrays.asList("ROLE_USER"))
                 .build()
         );
 
         this.userRepository.save(UserEntity.builder()
                 .username("admin")
-                .password(passwordEncoder.encode("password"))
-                .roles(Arrays.asList("USER", "ADMIN"))
+                .password(passwordEncoder.encode("!8hn}BUrpcxU/!4{"))
+                .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
                 .build()
         );
 

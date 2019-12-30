@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController()
-@RequestMapping("/user")
+@RequestMapping("/user/v1")
 public class UserInfoController {
 
     @SuppressWarnings("rawtypes")

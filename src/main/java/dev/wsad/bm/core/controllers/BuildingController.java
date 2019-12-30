@@ -9,28 +9,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1")
 class BuildingController {
 
     @Autowired
     private BuildingRepository repository;
 
-    @GetMapping("/api/user/buildings")
+    @GetMapping("/buildings")
     List<BuildingEntity> all() {
         return repository.findAll();
     }
 
-    @GetMapping("/api/user/buildings/{id}")
+    @GetMapping("/buildings/{id}")
     BuildingEntity one(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BuildingNotFoundException(id));
     }
 
-    @PostMapping("/api/user/buildings")
+    @PostMapping("/buildings")
     BuildingEntity create(@RequestBody BuildingEntity newBuilding) {
         return repository.save(newBuilding);
     }
 
-    @PutMapping("/api/user/buildings/{id}")
+    @PutMapping("/buildings/{id}")
     BuildingEntity replace(@RequestBody BuildingEntity newBuilding, @PathVariable Long id) {
         return repository.findById(id)
                 .map(building -> {
@@ -41,7 +42,7 @@ class BuildingController {
                 .orElseThrow(() -> new BuildingNotFoundException(id));
     }
 
-    @DeleteMapping("/api/user/buildings/{id}")
+    @DeleteMapping("/buildings/{id}")
     void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }

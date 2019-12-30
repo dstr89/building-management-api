@@ -28,13 +28,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class BuildingControllerTest {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    private static final BuildingEntity sampleBuildingOne = new BuildingEntity("Building 1", "Varazdin");
-    private static final BuildingEntity sampleBuildingTwo = new BuildingEntity("Building 2", "Zagreb");
+    private static final BuildingEntity sampleBuildingOne = BuildingEntity.builder()
+            .name("Test building 1")
+            .city("Varazdin")
+            .build();
+    private static final BuildingEntity sampleBuildingTwo = BuildingEntity.builder()
+            .name("Test building 2")
+            .city("Zagreb")
+            .build();
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     private BuildingRepository repository;
@@ -47,7 +54,7 @@ public class BuildingControllerTest {
     void testGetAllBuildingRecords() throws Exception {
         when(repository.findAll()).thenReturn(Arrays.asList(sampleBuildingOne, sampleBuildingTwo));
 
-        mockMvc.perform(get("/api/user/buildings")).andDo(print())
+        mockMvc.perform(get("/api/v1/buildings")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
@@ -62,7 +69,8 @@ public class BuildingControllerTest {
     void testGetOneBuildingRecord() throws Exception {
         when(repository.findById(1L)).thenReturn(Optional.of(sampleBuildingOne));
 
-        mockMvc.perform(get("/api/user/buildings/1")).andDo(print()).andExpect(status().isOk())
+        mockMvc.perform(get("/api/v1/buildings/1")).andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(sampleBuildingOne.getName())))
                 .andExpect(jsonPath("$.city", is(sampleBuildingOne.getCity())));
 
@@ -75,19 +83,20 @@ public class BuildingControllerTest {
             "WHEN the GET /buildings/1 endpoint is called, " +
             "THEN the 'Could not find employee' error is returned")
     void testGetNotExistingBuildingRecord() throws Exception {
-        mockMvc.perform(get("/api/user/buildings/1")).andDo(print()).andExpect(status().isNotFound())
+        mockMvc.perform(get("/api/v1/buildings/1")).andDo(print())
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString(BuildingNotFoundException.ERROR_MSG)));
     }
 
     @Test
-    @WithMockUser(value = "user")
-    @DisplayName("GIVEN an valid json-formatted building in the request body, " +
+    @WithMockUser(username="admin", roles={"USER", "ADMIN"})
+    @DisplayName("GIVEN an admin login and a valid json-formatted building in the request body, " +
             "WHEN the POST /buildings endpoint is called, " +
             "THEN the record is saved and returned in JSON format")
     void testSaveNewBuildingRecord() throws Exception {
         when(repository.save(sampleBuildingOne)).thenReturn(sampleBuildingOne);
 
-        mockMvc.perform(post("/api/user/buildings")
+        mockMvc.perform(post("/api/v1/buildings")
                 .content(objectMapper.writeValueAsString(sampleBuildingOne))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -97,8 +106,20 @@ public class BuildingControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "user")
-    @DisplayName("GIVEN an valid and existing  json-formatted building in the request body, " +
+    @WithMockUser(username="user")
+    @DisplayName("GIVEN a user without an ADMIN role, " +
+            "WHEN the POST /buildings endpoint is called, " +
+            "THEN the 403 response is returned")
+    void testOnlyAdminCanCreateBuildings() throws Exception {
+        mockMvc.perform(post("/api/v1/buildings")
+                .content(objectMapper.writeValueAsString(sampleBuildingOne))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username="admin", roles={"USER", "ADMIN"})
+    @DisplayName("GIVEN an admin login and a valid and existing  json-formatted building in the request body, " +
             "WHEN the PUT /buildings endpoint is called, " +
             "THEN the record is updated and returned in JSON format")
     void testUpdateExistingBuildingRecord() throws Exception {
@@ -106,7 +127,7 @@ public class BuildingControllerTest {
         sampleBuildingTwo.setName("New Name");
         when(repository.save(sampleBuildingTwo)).thenReturn(sampleBuildingTwo);
 
-        mockMvc.perform(put("/api/user/buildings/1")
+        mockMvc.perform(put("/api/v1/buildings/1")
                 .content(objectMapper.writeValueAsString(sampleBuildingTwo))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -116,12 +137,12 @@ public class BuildingControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "user")
-    @DisplayName("GIVEN an valid, but non-existing json-formatted building in the request body, " +
+    @WithMockUser(username="admin", roles={"USER", "ADMIN"})
+    @DisplayName("GIVEN an admin login and a valid, but non-existing json-formatted building in the request body, " +
             "WHEN the PUT /buildings endpoint is called, " +
             "THEN the record is updated and returned in JSON format")
     void testUpdateNonExistingBuildingRecord() throws Exception {
-        mockMvc.perform(put("/api/user/buildings/1")
+        mockMvc.perform(put("/api/v1/buildings/1")
                 .content(objectMapper.writeValueAsString(sampleBuildingTwo))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -129,15 +150,37 @@ public class BuildingControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "user")
-    @DisplayName("GIVEN a building with id=1 exists in the database, " +
+    @WithMockUser(username="user")
+    @DisplayName("GIVEN a user without an ADMIN role, " +
+            "WHEN the PUT /buildings endpoint is called, " +
+            "THEN the 403 response is returned")
+    void testOnlyAdminCanUpdateBuildings() throws Exception {
+        mockMvc.perform(put("/api/v1/buildings/1")
+                .content(objectMapper.writeValueAsString(sampleBuildingTwo))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username="admin", roles={"USER", "ADMIN"})
+    @DisplayName("GIVEN an admin login and a building with id=1 exists in the database, " +
             "WHEN the DELETE /buildings/1 endpoint is called, " +
             "THEN the record is deleted and an empty ok response is returned")
     void testDeleteBuilding() throws Exception {
-        mockMvc.perform(delete("/api/user/buildings/1"))
+        mockMvc.perform(delete("/api/v1/buildings/1"))
                 .andExpect(status().isOk());
 
         verify(repository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @WithMockUser(username="user")
+    @DisplayName("GIVEN a user without an ADMIN role, " +
+            "WHEN the DELETE /buildings/1 endpoint is called, " +
+            "THEN the 403 response is returned")
+    void testOnlyAdminCanDeleteBuildings() throws Exception {
+        mockMvc.perform(delete("/api/v1/buildings/1"))
+                .andExpect(status().isForbidden());
     }
 
 }

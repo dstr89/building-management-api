@@ -5,23 +5,23 @@
 ## Login
 
 ### Get token
-```curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"user\", \"password\":\"password\"}"```
+```curl -X POST http://localhost:8080/auth/v1/login -H "Content-Type:application/json" -d "{\"username\":\"admin\", \"password\":\"!8hn}BUrpcxU/!4{\"}"```
 
 ### Test token
-```curl -X GET http://localhost:8080/user/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
+```curl -X GET http://localhost:8080/user/v1/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU"```
 
 ## Buildings
 
 ### List all buildings
-```curl -X GET localhost:8080/api/user/buildings -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
+```curl -X GET localhost:8080/api/v1/buildings -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU"```
 ### Get specific building by ID
-```curl -X GET localhost:8080/api/user/buildings/1 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE1Nzc2MTY3MjAsImV4cCI6MTU3NzYyMDMyMH0.4xn4ru_Hb97z1sSpmCKoeoNKMHqnF6aRPoUYylvN1DQ"```
+```curl -X GET localhost:8080/api/v1/buildings/1 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU"```
 ### Save new building
-```curl -X POST localhost:8080/api/user/buildings -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Zagreb\"} -u user:1234```
+```curl -X POST localhost:8080/api/v1/buildings -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU" -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Zagreb\"}```
 ### Update existing building
-```curl -X PUT localhost:8080/api/user/buildings/1 -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Osijek\"} -u user:1234```
+```curl -X PUT localhost:8080/api/v1/buildings/1 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU" -H "Content-type:application/json" -d {\"name\":\"Zgrada1\",\"city\":\"Osijek\"}```
 ### Delete existing building
-```curl -X DELETE localhost:8080/api/user/buildings/2 -u user:1234```
+```curl -X DELETE localhost:8080/api/v1/buildings/2 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfVVNFUiIsIlJPTEVfQURNSU4iXSwiaWF0IjoxNTc3Njk5OTA5LCJleHAiOjE1Nzc3MDM1MDl9.m5Q7R6NepB_fmFUu-4r2gXp8p24C12t1Bn_Hbb-4eYU"```
 
 ## Spring
 
