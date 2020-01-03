@@ -6,22 +6,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 @Configuration
-public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private CustomPermissionEvaluator permissionEvaluator;
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setPermissionEvaluator(permissionEvaluator);
+        web.expressionHandler(handler);
     }
 
     @Override
@@ -34,10 +48,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/**/buildings/**").hasRole("USER")
-                .antMatchers(HttpMethod.PUT, "/api/**/buildings/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/**/buildings/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/**/buildings/**").hasRole("ADMIN")
+                .antMatchers("/api/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));

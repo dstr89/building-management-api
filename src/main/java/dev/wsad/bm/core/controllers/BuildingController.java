@@ -4,6 +4,7 @@ import dev.wsad.bm.core.entities.BuildingEntity;
 import dev.wsad.bm.core.exceptions.BuildingNotFoundException;
 import dev.wsad.bm.core.repository.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,26 +20,27 @@ class BuildingController {
     private BuildingRepository repository;
 
     @GetMapping("/buildings")
+    @PreAuthorize("hasRole('USER')")
+    @PostFilter("hasPermission(filterObject, read)")
     List<BuildingEntity> all() {
         return repository.findAll();
     }
 
     @GetMapping("/buildings/{id}")
+    @PreAuthorize("hasRole('USER') and hasPermission(#id, 'dev.wsad.bm.core.entities.BuildingEntity', read)")
     BuildingEntity one(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BuildingNotFoundException(id));
     }
 
     @PostMapping("/buildings")
-    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     BuildingEntity create(@RequestBody BuildingEntity newBuilding, Principal principal) {
-        BuildingEntity building = repository.save(newBuilding);
-        return building;
+        return repository.save(newBuilding);
     }
 
     @PutMapping("/buildings/{id}")
-    @PreAuthorize("hasPermission(#id, 'dev.wsad.bm.core.entities.BuildingEntity', write)")
-    @Transactional
+    @PreAuthorize("hasRole('ADMIN') and hasPermission(#id, 'dev.wsad.bm.core.entities.BuildingEntity', write)")
     BuildingEntity replace(@RequestBody BuildingEntity newBuilding, @PathVariable Long id) {
         return repository.findById(id)
                 .map(building -> {
@@ -50,8 +52,7 @@ class BuildingController {
     }
 
     @DeleteMapping("/buildings/{id}")
-    @PreAuthorize("hasPermission(#id, 'dev.wsad.bm.core.entities.BuildingEntity', delete)")
-    @Transactional
+    @PreAuthorize("hasRole('ADMIN') and hasPermission(#id, 'dev.wsad.bm.core.entities.BuildingEntity', delete)")
     void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }
