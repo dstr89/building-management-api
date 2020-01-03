@@ -1,4 +1,4 @@
-package dev.wsad.bm.core.controllers;
+package dev.wsad.bm.core.controllers.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.wsad.bm.core.data.AuthenticationRequest;
