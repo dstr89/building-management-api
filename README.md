@@ -2,7 +2,7 @@
 
 ## About
 
-A simple CRUD REST application in Spring using JWT built as an example to test Spring Boot features.
+A simple CRUD REST application in Spring using JWT and Spring Security. Built as an example to test Spring Boot features.
 
 ## API usage
 
