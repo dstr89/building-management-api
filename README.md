@@ -1,5 +1,9 @@
 # building-management-api
 
+## About
+
+A simple CRUD REST application in Spring using JWT built as an example to test Spring Boot features.
+
 ## API usage
 
 ## Login
