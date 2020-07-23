@@ -1,8 +1,14 @@
-# building-management-api
+# Building Management API
 
 ## About
 
-A simple CRUD REST application in Spring using JWT and Spring Security. Built as an example to test Spring Boot features.
+A simple CRUD REST application in Spring using JWT and Spring Security.
+
+## Dependencies
+
+### Database
+
+Install PostgreSQL (https://www.postgresql.org/) and update port/username/password in _application.properties_. Create _building-management_ database in pgAdmin.
 
 ## API usage
 
